@@ -8,11 +8,7 @@ function CheckpdivFrob(E,l,p)
     E:=ChangeRing(E,FF);
     G:=GL(2,p);
     F:=G!IntegralFrobenius(E);
-    if Order(F) mod p eq 0 then
-        return true;
-    else
-        return false;
-    end if;
+    return F;
 end function;
 
 //This function checks that for all primes q dividing \Delta_l (q/p) is not -1.
@@ -38,8 +34,8 @@ for label in EC do
         pD:=PrimeDivisors(D); //The condition -p Delta_l= s^2, implies that p| Delta_l, reducing the search space.
         pD:= [p : p in pD | p mod 24 eq 19 and IsSquare(-p*D)]; // We only need to consider primes p which are 19 mod 24 and such that -p Delta_l= s^2, as detailed on page 26. 
         for p in pD do 
-            if l ne p and CheckpdivFrob(E,l,p) and  Checkcond4(D, p) then //Checking the remaining two conditions.
-                print "triple (W, l ,p):=(", label, l, p, ")";
+            if l ne p and Order(CheckpdivFrob(E,l,p)) mod p eq 0 and  Checkcond4(D, p) then //Checking the remaining two conditions.
+                print CheckpdivFrob(E,l,p);
                 count:=count+1;
             end if;
         end for;
